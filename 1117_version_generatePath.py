@@ -1,4 +1,5 @@
 import csv
+import numpy as np
 from math import sin, cos, sqrt, atan2, radians
 from scipy.spatial import Voronoi, voronoi_plot_2d
 import matplotlib.pyplot as plt
@@ -17,6 +18,7 @@ class people:
         self.end_time=""
         self.speed=[]
         self.total_distance=0
+        self.avg_speed=0
         
 def calculate_time(timeS,timeE):
     s1=int(timeS.split(":")[0])
@@ -96,6 +98,8 @@ lastax=[]
 lastay=[]
 f=open("new.csv","w")
 f.write("shape_line\n")
+
+
 for item in list:
     startax.append(item.startx)
     startay.append(item.starty)
@@ -117,14 +121,20 @@ for item in list:
         print item.lastx
         print item.lasty
         print item.speed
+        item.avg_speed=item.total_distance*1000/calculate_time(item.start_time,item.end_time)
+        if ('output' in locals()):
+            output=np.vstack([output,[item.avg_speed,item.startx,item.starty,item.lastx,item.lasty]])
+        else:
+            output=np.array([item.avg_speed,item.startx,item.starty,item.lastx,item.lasty])
         
-        print item.total_distance*1000/calculate_time(item.start_time,item.end_time)
+        item.avg_speed=item.total_distance*1000/calculate_time(item.start_time,item.end_time)
     if item.lastx=="1":
         lastax.append(item.startx)
         lastay.append(item.starty)
     else: #x is latitude
         lastax.append(item.lastx)
         lastay.append(item.lasty)
+np.save("speeddata",output)
 plt.plot(startax,startay,'ro',lastax,lastay,'bo')
 #plt.plot(lastax,lastay,'ro')
 #for i in range(0,len(startax)):
