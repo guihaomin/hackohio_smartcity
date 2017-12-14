@@ -47,7 +47,7 @@ check=[]
 list=[]
 with open('28.csv', 'r') as csvfile:
     spamreader=csv.reader(csvfile, delimiter=' ', quotechar='|')
-    for row in range(0,100000):  #read first 200(4,6,7)
+    for row in range(0,2000):  #read first 200(4,6,7)
         buffer.append(spamreader.next())
 for item in buffer:
     if not item[1].split("|")[4] in check:
@@ -106,18 +106,28 @@ for item in list:
     if item.status=="started" or item.status=="ended":
         item.distance=distance(float(item.starty),float(item.lasty),float(item.startx),float(item.lastx))
     if not (item.status=="nul" or item.distance<0.6):
+    #if True:
+        f.write("\""+str(item.route).replace(" ","").replace("\'","")+"\"\n")
+        #f.write(item.startx+","+item.starty+"\n")
         
-
-    
-
-    
+        print "individual record starts here."
+        print item.status
+        print item.distance
+        print item.route
+        print item.start_time
+        print item.end_time
+        print item.startx
+        print item.starty
+        print item.lastx
+        print item.lasty
+        print item.speed
         item.avg_speed=item.total_distance*1000/calculate_time(item.start_time,item.end_time)
         if ('output' in locals()):
             output=np.vstack([output,[item.avg_speed,item.startx,item.starty,item.lastx,item.lasty]])
         else:
             output=np.array([item.avg_speed,item.startx,item.starty,item.lastx,item.lasty])
         
-        #item.avg_speed=item.total_distance*1000/calculate_time(item.start_time,item.end_time)
+        item.avg_speed=item.total_distance*1000/calculate_time(item.start_time,item.end_time)
     if item.lastx=="1":
         lastax.append(item.startx)
         lastay.append(item.starty)

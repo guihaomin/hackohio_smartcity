@@ -34,6 +34,7 @@ for i in range(0,len(y_pred)):
     elif(y_pred[i]==4):
         color.append("white")
 #plt.scatter(X, Y, c=color)
+print len(a)
 plt.scatter(hypoX, hypoY)
 plt.show()
 plt.clf()
