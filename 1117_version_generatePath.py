@@ -80,6 +80,8 @@ for item in buffer:
                     if (i.status=="started"):
                         i.speed.append(cur_speed)
                         i.total_distance+=distance_gap
+                        i.route.append([locY,locX])
+                    elif (i.status=="nul"):
                         i.route.append([pre[1].split("|")[7],pre[1].split("|")[6]])
                         i.route.append([locY,locX])
                 elif i.status=="nul":
