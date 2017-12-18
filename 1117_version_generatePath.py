@@ -71,7 +71,6 @@ for item in buffer:
                     #if i.status=="nul":
                     #    i.start_time=item[1].split("|")[0]
                     i.end_time=cTime
-                    i.status="started" 
                     i.lastx=locX
                     i.lasty=locY
                     #print item[1].split("|")[0]
@@ -84,6 +83,7 @@ for item in buffer:
                     elif (i.status=="nul"):
                         i.route.append([pre[1].split("|")[7],pre[1].split("|")[6]])
                         i.route.append([locY,locX])
+                    i.status="started"
                 elif i.status=="nul":
                     i.start_time=cTime
                     i.startx=locX
