@@ -13,7 +13,6 @@ class people:
         self.status="nul"
         self.distance=0
         self.route=[]
-        self.time=[]
         self.start_time=""
         self.end_time=""
         self.speed=[]
@@ -47,45 +46,48 @@ check=[]
 list=[]
 with open('28.csv', 'r') as csvfile:
     spamreader=csv.reader(csvfile, delimiter=' ', quotechar='|')
-    for row in range(0,100000):  #read first 200(4,6,7)
+    for row in range(0,10000):  #read first 200(4,6,7)
         buffer.append(spamreader.next())
 for item in buffer:
-    if not item[1].split("|")[4] in check:
-        check.append(item[1].split("|")[4])
-        list.append(people(item[1].split("|")[6],item[1].split("|")[7],item[1].split("|")[4]))
-        list[len(list)-1].route.append([item[1].split("|")[7],item[1].split("|")[6]])
-        list[len(list)-1].start_time=item[1].split("|")[0]
+    iden=item[1].split("|")[4]
+    cTime=item[1].split("|")[0]
+    locX=item[1].split("|")[6]
+    locY=item[1].split("|")[7]
+    if not iden in check:
+        check.append(iden)
+        list.append(people(locX,locY,iden))
+       # list[len(list)-1].route.append([item[1].split("|")[7],item[1].split("|")[6]])
+        list[len(list)-1].start_time=cTime
         list[len(list)-1].lastx=list[len(list)-1].startx
         list[len(list)-1].lasty=list[len(list)-1].starty
     else:
         #ind=0
     
         for i in list:
-            if i.iden==item[1].split("|")[4] and (not i.status=="ended"):
-                distance_gap=distance(float(i.lasty),float(item[1].split("|")[7]),float(i.lastx),float(item[1].split("|")[6]))
-                cur_speed=distance_gap*1000/calculate_time(pre[1].split("|")[0],item[1].split("|")[0])
+            if i.iden==iden and (not i.status=="ended"):
+                distance_gap=distance(float(i.lasty),float(locY),float(i.lastx),float(locX))
+                cur_speed=distance_gap*1000/calculate_time(pre[1].split("|")[0],cTime)
                 if(cur_speed>=0.5):
                     #if i.status=="nul":
                     #    i.start_time=item[1].split("|")[0]
-                    i.end_time=item[1].split("|")[0]
-                    if (i.status!="ended"):
-                        i.status="started" 
-                    i.lastx=item[1].split("|")[6]
-                    i.lasty=item[1].split("|")[7]
+                    i.end_time=cTime
+                    i.status="started" 
+                    i.lastx=locX
+                    i.lasty=locY
                     #print item[1].split("|")[0]
                     #print distance_gap
                     #time_diff=calculate_time(pre[1].split("|")[0],item[1].split("|")[0])
                     if (i.status=="started"):
                         i.speed.append(cur_speed)
-                    if (i.status=="started"):
                         i.total_distance+=distance_gap
-                    i.route.append([item[1].split("|")[7],item[1].split("|")[6]])
+                        i.route.append([pre[1].split("|")[7],pre[1].split("|")[6]])
+                        i.route.append([locY,locX])
                 elif i.status=="nul":
-                    i.start_time=item[1].split("|")[0]
-                    i.startx=item[1].split("|")[6]
-                    i.starty=item[1].split("|")[7]
-                    i.lastx=item[1].split("|")[6]
-                    i.lasty=item[1].split("|")[7]
+                    i.start_time=cTime
+                    i.startx=locX
+                    i.starty=locY
+                    i.lastx=locX
+                    i.lasty=locY
                 elif i.status=="started":
                     i.status="ended"
                     i.end_time=pre[1].split("|")[0]
